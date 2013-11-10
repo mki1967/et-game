@@ -19,7 +19,7 @@ USAGE:
 ------
 In the directory containing the compiled program type:
 
-./runme
+bash ./runme
 
 
 Note that runme is a script that
@@ -28,21 +28,20 @@ starts the compiled program:
 with a configuration file name as the argument.
 
 
-RULES OF THE GAME:
-------------------
+RULES OF THE GAME AND KEYBARD ACTIONS:
+--------------------------------------
 
 In each round the player has to collect 10 objects randomly scattered
 in a 3-dimensional scene.
+
 The player can navigate by pressing
-<Arrow keys>/<Home>/<End>/<Space> (with or without <Shift> key).
+'b'/'f'/<Arrow keys>/<Home>/<End>/<Space> (with or without <Shift> key).
+(Warning: Keyboard CapsLock must be off.) 
 
 After each round he receives 1000000/((s+1)*(s+1)) points,
 where s is the time in seconds of the round.
-As soon as the player has collected 100 points or more in 
-the stage a teleport gate appears in some place
+Then a "teleport gate" appears in some random place
 that can be used to move the player to the next stage.
-
-(Warning: Keyboard CapsLock must be off.) 
 
 
 CONFIGURATION FILE OF THE GAME
@@ -58,7 +57,7 @@ used in the stages of the game.
 
 You can extend the game by designing your own stages and adding
 their names to the configuration file. 
-(You can find E.T. EDITOR at http://freshmeat.net )
+(At this moment you can find E.T. EDITOR at http://freecode.com/projects/etedit )
 
 
 
