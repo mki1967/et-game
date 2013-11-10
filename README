@@ -1,0 +1,68 @@
+E.T. GAME
+
+Copyright (C) 2003, 2013  Marcin Kik      kik@im.pwr.wroc.pl
+
+E.T. GAME comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it
+under conditions of GNU GENERAL PUBLIC LICENSE
+
+Send any comments or suggestions to: kik@im.pwr.wroc.pl
+Most recent versions are available at: http://www.im.pwr.wroc.pl/~kik/et/
+
+
+INSTALLING:
+-----------
+
+The program requires X11 with GL/GLX libraries.
+
+
+
+USAGE:
+------
+In the directory containing the compiled program type:
+
+./runme
+
+
+Note that runme is a script that
+starts the compiled program:
+./et-game
+with a configuration file name as the argument.
+
+
+RULES OF THE GAME:
+------------------
+
+In each round the player has to collect 10 objects randomly scattered
+in a 3-dimensional scene.
+The player can navigate by pressing
+<Arrow keys>/<Home>/<End>/<Space> (with or without <Shift> key).
+
+After each round he receives 1000000/((s+1)*(s+1)) points,
+where s is the time in seconds of the round.
+As soon as the player has collected 100 points or more in 
+the stage a teleport gate appears in some place
+that can be used to move the player to the next stage.
+
+(Warning: Keyboard CapsLock must be off.) 
+
+
+CONFIGURATION FILE OF THE GAME
+------------------------------
+
+Configuration file is a sequence of the file names.
+Each of these files contains a shape designed
+with E.T. EDITOR.
+The first file contains the shape of the collected objects.
+The second file contains the shape of the teleport gate.
+The remaining files contain designs of the 3D scenes
+used in the stages of the game.
+
+You can extend the game by designing your own stages and adding
+their names to the configuration file. 
+(You can find E.T. EDITOR at http://freshmeat.net )
+
+
+
+
+
