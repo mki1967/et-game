@@ -42,7 +42,7 @@ int file_exists(char* fname)
 
 void stage_names_load(FILE* conf)
 {
-  FILE* f;
+  /* FILE* f; */
   char fname[500];
   Bool ok=True;
 
@@ -72,7 +72,7 @@ void stage_names_load(FILE* conf)
 void scene_get_range(struct Graph* sptr, 
 		 float vmin[3], float vmax[3])
 {
-  int i=0,used=0;
+  int i=0 /* , used=0 */;
   float_zeroes(3,vmin);
   float_zeroes(3,vmax);
 
@@ -447,7 +447,7 @@ void graph_init(struct Graph * gptr)
 }
 
 
-int config_next_scene()
+void config_next_scene()
 {
   struct Graph scene1;
   graph_init(&scene1);
@@ -490,7 +490,7 @@ int scene_load(
 	       )
 {
   FILE *stream;
-  char label[200];
+  /* char label[200]; */
 
   stream=fopen(fname,"r");
   if(stream==NULL) 
@@ -542,7 +542,7 @@ int graph_load(
 	       )
 {
   FILE *stream;
-  char label[200];
+/*  char label[200]; */
 
   stream=fopen(fname,"r");
   if(stream==NULL) 
@@ -559,12 +559,12 @@ int graph_load(
 
 
 
-int graph_fscanf(
+void graph_fscanf(
 		 FILE *stream,
 		 struct Graph * gptr
 		 )
 {
-  char label[200];
+/*  char label[200]; */
   graph_free(gptr);
 
   {
@@ -638,7 +638,7 @@ void remaining_fscanf(
 		)
 {
   char label[200];
-  float cursor[3];
+/*  float cursor[3]; */
 
 
   // TRANSFORMATION

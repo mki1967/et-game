@@ -278,7 +278,7 @@ void graph_free(struct Graph * gptr);
 
 void graph_init(struct Graph * gptr);
 
-int config_next_scene();
+void config_next_scene();
 
 int scene_load(
 	       char* fname,
@@ -294,7 +294,7 @@ int graph_load(
 
 	       );
 
-int graph_fscanf(
+void graph_fscanf(
 		 FILE *stream,
 		 struct Graph * gptr
 		 );
