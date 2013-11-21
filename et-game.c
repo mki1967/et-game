@@ -1137,7 +1137,7 @@ void help_keys()
 }
 
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 
 
@@ -1221,6 +1221,8 @@ void main(int argc, char *argv[])
   
 
   mainloop();
+
+  return 0;
 }
 
 

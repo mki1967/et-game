@@ -341,5 +341,5 @@ void redraw();
 
 void help_keys();
 
-void main(int argc, char *argv[]);
+int  main(int argc, char *argv[]);
 
