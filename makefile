@@ -1,6 +1,7 @@
 # INC= -I/usr/X11/include/ -I/usr/share/doc/packages/NVIDIA_GLX/include/
 # INC= -I/usr/openwin/include/
 # INC= -I/usr/include/X11/ -I/usr/share/doc/NVIDIA_GLX-1.0/include/
+ INC= -I/usr/include/X11/
  LIB= -L/usr/X11/lib 
 # LIB= -L/usr/openwin/lib/
 # LIB= -L/usr/X11R6/lib 

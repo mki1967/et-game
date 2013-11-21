@@ -213,7 +213,7 @@ int file_exists(char* fname)
 }
 
 
-int stage_names_load(FILE* conf)
+void stage_names_load(FILE* conf)
 {
   FILE* f;
   char fname[500];
@@ -242,7 +242,7 @@ int stage_names_load(FILE* conf)
 
 
 
-scene_get_range(struct Graph* sptr, 
+void scene_get_range(struct Graph* sptr, 
 		 float vmin[3], float vmax[3])
 {
   int i=0,used=0;
@@ -275,7 +275,7 @@ scene_get_range(struct Graph* sptr,
 
 
 
-token_try_collect()
+void token_try_collect()
 {
   int i;
   if(gate_visible &&
@@ -332,7 +332,7 @@ token_try_collect()
 
 
 
-token_positions_init()
+void token_positions_init()
 {
   int i;
   float vmin[3], vmax[3];
@@ -355,7 +355,7 @@ token_positions_init()
 }
 
 
-gate_init()
+void gate_init()
 {
   float vmin[3], vmax[3];
   scene_get_range(&scene, 
@@ -370,7 +370,7 @@ gate_init()
 ///// TRAVELER
 
 
-traveler_init(struct Traveler * traveler)
+void traveler_init(struct Traveler * traveler)
 {
   traveler->radius=0.5;
   traveler->h_angle=0;
@@ -380,7 +380,7 @@ traveler_init(struct Traveler * traveler)
 
 
 
-traveler_move(float x, float y, float z, struct Traveler * traveler)
+void traveler_move(float x, float y, float z, struct Traveler * traveler)
 {
   float m[16];
 
@@ -416,18 +416,18 @@ traveler_move(float x, float y, float z, struct Traveler * traveler)
 }
 
 
-traveler_h_rotate(int angle, struct Traveler * traveler)
+void traveler_h_rotate(int angle, struct Traveler * traveler)
 {
   traveler->h_angle=(traveler->h_angle+angle+360)%360;
 }
 
-traveler_v_rotate(int angle, struct Traveler * traveler)
+void traveler_v_rotate(int angle, struct Traveler * traveler)
 {
   if(fabs(angle+traveler->v_angle) <= v_max_angle)
     traveler->v_angle+=angle;
 }
 
-traveler_upright(struct Traveler * traveler)
+void traveler_upright(struct Traveler * traveler)
 {
   traveler->v_angle=0;
 }
@@ -435,7 +435,7 @@ traveler_upright(struct Traveler * traveler)
 ////// SCREEN
 
 
-screen_init(struct Screen* scr)
+void screen_init(struct Screen* scr)
 {
   scr->distance=screen_distance;
   scr->clip_min=clip_min;
@@ -445,14 +445,14 @@ screen_init(struct Screen* scr)
 }
 
 
-screen_set_distance(struct Screen* scr,float distance)
+void screen_set_distance(struct Screen* scr,float distance)
 {
   scr->distance=distance;
   setfrustum();
   printf("Screen distance is: %f\n", scr->distance);
 }
 
-screen_set_clipping(struct Screen* scr,float clip_min, float clip_max)
+void screen_set_clipping(struct Screen* scr,float clip_min, float clip_max)
 {
   if(clip_min_limit<= clip_min && clip_min<= clip_max)
     {
@@ -468,13 +468,13 @@ screen_set_clipping(struct Screen* scr,float clip_min, float clip_max)
 
 /// VECTOR OPERATIONS
 
-float_zeroes(int n, float v[])
+void float_zeroes(int n, float v[])
 {
   int i;
   for(i=0; i<n; i++) v[i]=0.0;
 }
 
-double_zeroes(int n, double v[])
+void double_zeroes(int n, double v[])
 {
   int i;
   for(i=0; i<n; i++) v[i]=0.0;
@@ -486,26 +486,26 @@ Bool vector_eq(float  a[], float b[])
   return a[0]==b[0] && a[1]==b[1] && a[2]==b[2];
 }
 
-vector_add(float a[], float b[], float result[])
+void vector_add(float a[], float b[], float result[])
 {
   result[0]=a[0]+b[0];
   result[1]=a[1]+b[1];
   result[2]=a[2]+b[2];
 }
 
-vector_sub(float a[], float b[], float result[])
+void vector_sub(float a[], float b[], float result[])
 {
   result[0]=a[0]-b[0];
   result[1]=a[1]-b[1];
   result[2]=a[2]-b[2];
 }
 
-vector_scale( float s, float v[])
+void vector_scale( float s, float v[])
 {
   v[0]*=s;  v[1]*=s; v[2]*=s;
 }
 
-vectorcpy(float dst[], float src[])
+void vectorcpy(float dst[], float src[])
 {
   dst[0]=src[0];
   dst[1]=src[1];
@@ -513,7 +513,7 @@ vectorcpy(float dst[], float src[])
 }
 
 
-vector_product(float a[], float b[], float result[])
+void vector_product(float a[], float b[], float result[])
 {
   result[0]=a[1]*b[2]-a[2]*b[1];
   result[1]=a[2]*b[0]-a[0]*b[2];
@@ -525,7 +525,7 @@ float scalar_product(float a[], float b[])
   return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
 }
 
-vector_normalize(float v[])
+void vector_normalize(float v[])
 {
   float sp=scalar_product(v,v);
   if(sp==0) return; // zero length vector
@@ -539,14 +539,14 @@ vector_normalize(float v[])
 
 ///// VECTOR I/O
 
-vector_fprintf(FILE *stream, float v[3])
+void vector_fprintf(FILE *stream, float v[3])
 {
   fprintf(stream, "%f\n", v[0]);
   fprintf(stream, "%f\n", v[1]);
   fprintf(stream, "%f\n", v[2]);
 } 
 
-vector_fscanf(FILE *stream, float v[3])
+void vector_fscanf(FILE *stream, float v[3])
 {
   fscanf(stream, "%f", &v[0]);
   fscanf(stream, "%f", &v[1]);
@@ -559,7 +559,7 @@ vector_fscanf(FILE *stream, float v[3])
 
 //// LIGHT
 
-set_light(float light[16])
+void set_light(float light[16])
 {
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
@@ -582,7 +582,7 @@ set_light(float light[16])
 
 
 
-triangle_normal_vector(float a[], float b[], float c[], float norm[])
+void triangle_normal_vector(float a[], float b[], float c[], float norm[])
 {
   float v[3], w[3];
   vector_sub(b,a, v);
@@ -595,7 +595,7 @@ triangle_normal_vector(float a[], float b[], float c[], float norm[])
 
 ///// LOADING
 
-graph_free(struct Graph * gptr)
+void graph_free(struct Graph * gptr)
 {
   free(gptr->vertex);
   free(gptr->edge);
@@ -609,7 +609,7 @@ graph_free(struct Graph * gptr)
 }
 
 
-graph_init(struct Graph * gptr)
+void graph_init(struct Graph * gptr)
 {
   gptr->vertex=NULL;
   gptr->edge=NULL;
@@ -803,7 +803,7 @@ int graph_fscanf(
 
 
 
-remaining_fscanf(
+void remaining_fscanf(
 		FILE* stream,
 		float light[3],
 		int* background,
@@ -853,7 +853,7 @@ remaining_fscanf(
 //////////// X STUFF ///////
 
 
-initglx()
+void initglx()
 {
 
 display=XOpenDisplay( NULL );
@@ -924,7 +924,7 @@ if(xvisualinfo_array==NULL)
 /////////////////////////////////////////////////////////////////////////////////
 
 
-mainloop()
+void mainloop()
 {
   XEvent event;
 
@@ -946,7 +946,7 @@ mainloop()
 
 ////// CALLBACKS
 
-callbackExpose( XExposeEvent* evptr)
+void callbackExpose( XExposeEvent* evptr)
 {
 
   long event_mask=ExposureMask;
@@ -993,7 +993,7 @@ callbackExpose( XExposeEvent* evptr)
 
 ////////////// KEY COMMANDS ////////////
 
-callbackKeyPress( XKeyEvent* evptr)
+void callbackKeyPress( XKeyEvent* evptr)
 {
   long event_mask=KeyPressMask;
   while(XCheckWindowEvent(display,window,event_mask , (XEvent*) evptr));
@@ -1154,7 +1154,7 @@ callbackKeyPress( XKeyEvent* evptr)
 
 
 
-setfrustum()
+void setfrustum()
 {
   float rwidth;
   float rheight;
@@ -1176,7 +1176,7 @@ setfrustum()
 
 
 
-graph_to_display_list(GLuint list, struct Graph *gptr)
+void graph_to_display_list(GLuint list, struct Graph *gptr)
 {
   int i;
 
@@ -1214,7 +1214,7 @@ graph_to_display_list(GLuint list, struct Graph *gptr)
 
 
 
-redraw()
+void redraw()
 {
 
   glClearColor(color[background][0], color[background][1], color[background][2], 0.0);
@@ -1287,7 +1287,7 @@ redraw()
 
 ////////// MAIN
 
-help_keys()
+void help_keys()
 {
   printf("\n--------- LIST OF KEY COMMANDS -------------\n");
   printf("<Arrow keys> - turn your head\n");
@@ -1310,7 +1310,7 @@ help_keys()
 }
 
 
-main(int argc, char *argv[])
+void main(int argc, char *argv[])
 {
 
 
