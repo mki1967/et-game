@@ -26,7 +26,7 @@
 
 #include "et-game.h"
 
-//// FUNCTIONS 
+/* //// FUNCTIONS  */
 
 
 int file_exists(char* fname)
@@ -137,7 +137,7 @@ void token_try_collect()
 	      printf("YOU HAVE %d+%d=%d POINTS.\n",
 		     score,s, score+s);
 	      score+=s; 
-	      // if(score-last_score>= 100)
+	      /* // if(score-last_score>= 100) */
 		{
 		  gate_visible=True;
 		  printf("STAGE FINISHED IN %d SECONDS.\n",
@@ -194,7 +194,7 @@ void gate_init()
 }
 
 
-///// TRAVELER
+/* ///// TRAVELER */
 
 
 void traveler_init(struct Traveler * traveler)
@@ -259,7 +259,7 @@ void traveler_upright(struct Traveler * traveler)
   traveler->v_angle=0;
 }
 
-////// SCREEN
+/* ////// SCREEN */
 
 
 void screen_init(struct Screen* scr)
@@ -293,7 +293,7 @@ void screen_set_clipping(struct Screen* scr,float clip_min, float clip_max)
 }
 
 
-/// VECTOR OPERATIONS
+/* /// VECTOR OPERATIONS */
 
 void float_zeroes(int n, float v[])
 {
@@ -355,7 +355,7 @@ float scalar_product(float a[], float b[])
 void vector_normalize(float v[])
 {
   float sp=scalar_product(v,v);
-  if(sp==0) return; // zero length vector
+  if(sp==0) return; /* // zero length vector */
   sp=sqrt(sp); 
   v[0]/=sp;  v[1]/=sp;  v[2]/=sp;
 }
@@ -364,7 +364,7 @@ void vector_normalize(float v[])
 
 
 
-///// VECTOR I/O
+/* ///// VECTOR I/O */
 
 void vector_fprintf(FILE *stream, float v[3])
 {
@@ -384,7 +384,7 @@ void vector_fscanf(FILE *stream, float v[3])
 
 
 
-//// LIGHT
+/* //// LIGHT */
 
 void set_light(float light[16])
 {
@@ -403,7 +403,7 @@ void set_light(float light[16])
 
 
 
-//// EDGE
+/* //// EDGE */
 
 
 
@@ -420,7 +420,7 @@ void triangle_normal_vector(float a[], float b[], float c[], float norm[])
 
 
 
-///// LOADING
+/* ///// LOADING */
 
 void graph_free(struct Graph * gptr)
 {
@@ -568,7 +568,7 @@ void graph_fscanf(
   graph_free(gptr);
 
   {
-    // VERTICES
+    /* // VERTICES */
     int i;
     fscanf(stream,"%d",&(gptr->vsize));
     free(gptr->vertex);
@@ -585,7 +585,7 @@ void graph_fscanf(
 
 
   {
-    // EDGES
+    /* // EDGES */
     int i;
     fscanf(stream,"%d", &(gptr->edge_top));
     gptr->edge= (int*) malloc( sizeof(int)*2* gptr->edge_top);
@@ -602,7 +602,7 @@ void graph_fscanf(
 
 
   {
-    // TRIANGLES
+    /* // TRIANGLES */
     int i;
     fscanf(stream,"%d", &(gptr->triangle_top));
     gptr->triangle= (int*) malloc( sizeof(int)*3* gptr->triangle_top);
@@ -641,7 +641,7 @@ void remaining_fscanf(
 /*  float cursor[3]; */
 
 
-  // TRANSFORMATION
+  /* // TRANSFORMATION */
   fscanf(stream, "%s", label);
   if(strcmp(label, transformation_label)==0)
        do
@@ -650,18 +650,18 @@ void remaining_fscanf(
 	 }
        while(strcmp(label, light_label)!=0);
 
-  // LIGHT
+  /* // LIGHT */
   vector_fscanf(stream, light);
     
 
-  // BACKGROUND
+  /* // BACKGROUND */
   fscanf(stream, "%s", label);
   if(strcmp(label, background_label)==0)
     {
       fscanf(stream, "%d\n", background);
     }
 
-  // CURSOR
+  /* // CURSOR */
   fscanf(stream, "%s", label);
   if(strcmp(label, cursor_label)==0)
     {
@@ -677,7 +677,7 @@ void remaining_fscanf(
 
 
 
-//////////// X STUFF ///////
+/* //////////// X STUFF /////// */
 
 
 void initglx()
@@ -722,7 +722,7 @@ if(xvisualinfo_array==NULL)
 
 
  {
-   /// Enable events for the window
+   /* /// Enable events for the window */
 
    unsigned long valuemask=CWEventMask;
    windowattributes.event_mask=
@@ -735,8 +735,8 @@ if(xvisualinfo_array==NULL)
  XMapWindow(display, window);
  XFlush(display);
 
- // printf("terminal: %d\n", terminal); 
- // printf("window: %d\n", window); 
+ /* // printf("terminal: %d\n", terminal);  */
+ /* // printf("window: %d\n", window);  */
 
  
  glxcontext= glXCreateContext(display, &xvisualinfo_array[0], NULL, True);
@@ -748,7 +748,7 @@ if(xvisualinfo_array==NULL)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
+/* ///////////////////////////////////////////////////////////////////////////////// */
 
 
 void mainloop()
@@ -771,7 +771,7 @@ void mainloop()
 
 
 
-////// CALLBACKS
+/* ////// CALLBACKS */
 
 void callbackExpose( XExposeEvent* evptr)
 {
@@ -804,7 +804,7 @@ void callbackExpose( XExposeEvent* evptr)
   }
   setfrustum();
 
-  // REDEFINE DISPLAY LISTS
+  /* // REDEFINE DISPLAY LISTS */
   scene_list= glGenLists(1);
   token_list=glGenLists(1);
   gate_list=glGenLists(1);
@@ -818,7 +818,7 @@ void callbackExpose( XExposeEvent* evptr)
 }
 
 
-////////////// KEY COMMANDS ////////////
+/* ////////////// KEY COMMANDS //////////// */
 
 void callbackKeyPress( XKeyEvent* evptr)
 {
@@ -961,7 +961,7 @@ void callbackKeyPress( XKeyEvent* evptr)
       if(stage_random) 
 	{
 	  stage_random=False;
-          // stage_current=-1;
+          /* // stage_current=-1; */
 	  printf("RANDOM STAGE SELECTION: OFF\n");
 	}
       else
@@ -999,7 +999,7 @@ void setfrustum()
 
 
 
-//// REDRAW /////////
+/* //// REDRAW ///////// */
 
 
 
@@ -1009,7 +1009,7 @@ void graph_to_display_list(GLuint list, struct Graph *gptr)
 
   glNewList(list, GL_COMPILE);
 
-  // EDGES
+  /* // EDGES */
   glDisable(GL_LIGHTING);
   glBegin(GL_LINES);
   for(i=0; i<gptr->edge_top; i++)
@@ -1021,7 +1021,7 @@ void graph_to_display_list(GLuint list, struct Graph *gptr)
   
   glEnd();    
 
-  // TRIANGLES
+  /* // TRIANGLES */
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHT1);
@@ -1051,8 +1051,8 @@ void redraw()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  glRotatef(-traveler.v_angle, 1,0,0); // vertical rotation
-  glRotatef(-traveler.h_angle, 0,1,0); // horizontal rotation
+  glRotatef(-traveler.v_angle, 1,0,0); /* // vertical rotation */
+  glRotatef(-traveler.h_angle, 0,1,0); /* // horizontal rotation */
   glTranslated(-traveler.position[0],-traveler.position[1],-traveler.position[2]);
     
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1077,7 +1077,7 @@ void redraw()
   glCallList( scene_list );
 
   {
-    // DRAW TOKENS
+    /* // DRAW TOKENS */
     int i;
     for(i=0; i<TOKEN_MAX; i++)
       if(!token_collected[i])
@@ -1106,13 +1106,13 @@ void redraw()
 	}
 
 
-  //   glFlush();
+  /* //   glFlush(); */
   glXSwapBuffers(display,window);
 }
 
 
 
-////////// MAIN
+/* ////////// MAIN */
 
 void help_keys()
 {
@@ -1129,7 +1129,7 @@ void help_keys()
 /*   printf("<B> - change background color\n"); */
   printf("<Q> - quit\n");
 
-  // ...
+  /* // ... */
 
   printf("-----------------------------------------\n\n");
 
@@ -1217,7 +1217,7 @@ int main(int argc, char *argv[])
 
 
   XRaiseWindow(display, window);
-  // XSetInputFocus(display, window, RevertToParent, CurrentTime);
+  /* // XSetInputFocus(display, window, RevertToParent, CurrentTime); */
   
 
   mainloop();

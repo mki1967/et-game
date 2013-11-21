@@ -39,9 +39,9 @@
 #include <GL/glx.h>
 
 
-///// PROGRAM VARIABLES AND FUNCTIONS ////////////////////////
+/* ///// PROGRAM VARIABLES AND FUNCTIONS //////////////////////// */
 
-///////// X / GLX VARIABLES
+/* ///////// X / GLX VARIABLES */
 
 Display *display;
 XVisualInfo *xvisualinfo_array;
@@ -54,7 +54,7 @@ GLXContext glxcontext;
 
 
 
-//////// PROGRAM INTERNAL VARIABLES
+/* //////// PROGRAM INTERNAL VARIABLES */
 
 
 float pixel_size=0.028;
@@ -77,7 +77,7 @@ char file_name[MAX_FILE_NAME+5]="noname.et";
 int sound=1;
 
 
-///// TRAVELER VARIABLES
+/* ///// TRAVELER VARIABLES */
 
 struct Traveler
 {
@@ -90,7 +90,7 @@ struct Traveler
 struct Traveler traveler;
 
 
-/// SCREEN VARIABLES
+/* /// SCREEN VARIABLES */
 
 struct Screen
 {
@@ -104,7 +104,7 @@ struct Screen screen;
 
 
 
-///// COLOR VARIABLES 
+/* ///// COLOR VARIABLES  */
 
 #define COLOR_MAX 12
 
@@ -129,7 +129,7 @@ int current_color=0;
 
 
 
-///// LIGHT VARIABLES
+/* ///// LIGHT VARIABLES */
 
 float basic_light[16]= {0.0, 0.0, 1.0, 0.0};
 float light[16]= {0.0, 0.0, 1.0, 0.0};
@@ -138,7 +138,7 @@ Bool two_lights = True;
 
 
 
-//// GRAPH
+/* //// GRAPH */
 
 struct Graph
 {
@@ -162,7 +162,7 @@ struct Graph scene, token, gate;
 
 
 
-//// LOADING VARIABLES
+/* //// LOADING VARIABLES */
 char transformation_label[]="TRANSFORMATION";
 char light_label[]="LIGHT";
 char background_label[]="BACKGROUND";
@@ -171,7 +171,7 @@ char cursor_label[]="CURSOR";
 
 
 
-/// DISPLAY LISTS
+/* /// DISPLAY LISTS */
 
 GLuint scene_list, token_list, gate_list;
 
@@ -199,7 +199,7 @@ int stage_current=-1;
 Bool stage_random=False;
 
 
-//// FUNCTIONS 
+/* //// FUNCTIONS  */
 
 
 int file_exists(char* fname);
@@ -215,7 +215,7 @@ void token_positions_init();
 
 void gate_init();
 
-///// TRAVELER
+/* ///// TRAVELER */
 
 void traveler_init(struct Traveler * traveler);
 
@@ -227,7 +227,7 @@ void traveler_v_rotate(int angle, struct Traveler * traveler);
 
 void traveler_upright(struct Traveler * traveler);
 
-////// SCREEN
+/* ////// SCREEN */
 
 
 void screen_init(struct Screen* scr);
@@ -236,7 +236,7 @@ void screen_set_distance(struct Screen* scr,float distance);
 
 void screen_set_clipping(struct Screen* scr,float clip_min, float clip_max);
 
-/// VECTOR OPERATIONS
+/* /// VECTOR OPERATIONS */
 
 void float_zeroes(int n, float v[]);
 
@@ -258,21 +258,21 @@ float scalar_product(float a[], float b[]);
 
 void vector_normalize(float v[]);
 
-///// VECTOR I/O
+/* ///// VECTOR I/O */
 
 void vector_fprintf(FILE *stream, float v[3]);
 
 void vector_fscanf(FILE *stream, float v[3]);
 
-//// LIGHT
+/* //// LIGHT */
 
 void set_light(float light[16]);
 
-//// EDGE
+/* //// EDGE */
 
 void triangle_normal_vector(float a[], float b[], float c[], float norm[]);
 
-///// LOADING
+/* ///// LOADING */
 
 void graph_free(struct Graph * gptr);
 
@@ -307,29 +307,29 @@ void remaining_fscanf(
 		struct Traveler *travptr
 		);
 
-//////////// X STUFF ///////
+/* //////////// X STUFF /////// */
 
 
 void initglx();
 
-/////////////////////////////////////////////////////////////////////////////////
+/* ///////////////////////////////////////////////////////////////////////////////// */
 
 void mainloop();
 
-////// CALLBACKS
+/* ////// CALLBACKS */
 
 void callbackExpose( XExposeEvent* evptr);
 
 
-////////////// KEY COMMANDS ////////////
+/* ////////////// KEY COMMANDS //////////// */
 
 void callbackKeyPress( XKeyEvent* evptr);
 
-/////////////// 
+/* ///////////////  */
 
 void setfrustum();
 
-//// REDRAW /////////
+/* //// REDRAW ///////// */
 
 void graph_to_display_list(GLuint list, struct Graph *gptr);
 
@@ -337,7 +337,7 @@ void graph_to_display_list(GLuint list, struct Graph *gptr);
 void redraw();
 
 
-////////// MAIN
+/* ////////// MAIN */
 
 void help_keys();
 
