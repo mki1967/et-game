@@ -2,7 +2,7 @@
  *
  *    et-game 
  * 
- *    Copyright (C) 2003, 2013  Marcin Kik
+ *    Copyright (C) 2003, 2013  Marcin Kik mki1967@gmail.com
  *
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
  *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  *
- *    The author can be reached at kik@im.pwr.wroc.pl 
+ *    The author can be reached at mki1967@gmail.com
  *       
  *
  **/
