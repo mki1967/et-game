@@ -28,7 +28,7 @@ starts the compiled program:
 with a configuration file name as the argument.
 
 
-RULES OF THE GAME AND KEYBARD ACTIONS:
+RULES OF THE GAME AND KEYBOARD ACTIONS:
 --------------------------------------
 
 In each round the player has to collect 10 objects randomly scattered
@@ -57,7 +57,7 @@ used in the stages of the game.
 
 You can extend the game by designing your own stages and adding
 their names to the configuration file. 
-(At this moment you can find E.T. EDITOR at http://freecode.com/projects/etedit )
+(At this moment you can find E.T. EDITOR at https://github.com/mki1967/et-edit )
 
 
 
