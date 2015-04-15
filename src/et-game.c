@@ -1150,15 +1150,15 @@ int main(int argc, char *argv[])
 
   printf("==================================================\n");
   printf("E.T. GAME: SEARCH GAME\n");
-  printf("version 1.03\n\n");
+  printf("version: " PACKAGE_VERSION "\n\n");
   printf("Copyright (C) 2003, 2013  Marcin Kik   mki1967@gmail.com \n");
   printf("\nE.T. GAME comes with ABSOLUTELY NO WARRANTY.\n");
 
   printf("This is free software, and you are welcome to redistribute it\n");
   printf(" under conditions of GNU GENERAL PUBLIC LICENSE\n");
 
-  printf("Send any comments or suggestions to: kik@im.pwr.wroc.pl\n");
-  printf("Most recent versions are available at: https://github.com/mki1967/et-game\n");
+  printf("Send any comments or suggestions to: " PACKAGE_BUGREPORT "\n");
+  printf("Most recent versions are available at: " PACKAGE_URL "\n");
 
   printf("\n");
   printf("(Press key <H> on graphical window to print the list of key commands)\n");
