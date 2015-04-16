@@ -49,16 +49,23 @@ void stage_names_load(FILE* conf)
 
   while(stage_top<STAGE_MAX && ok)
     {
+      char fullName[MAX_PATH_LENGTH];
+
       fscanf(conf, "%490s", fname);
-      ok= file_exists(fname);
+      fullName[0]= (char) 0;
+      strcat(fullName, dataDir);
+      strcat(fullName, fname);
+      printf("TEST stage_names_load: %s\n", fullName);
+
+      ok= file_exists(fullName);
       if( ok)
 	{
 	  stage_name[stage_top]= 
 	    (char*) malloc(sizeof(char)*(strlen(fname)+1));
 	  if(stage_name[stage_top]!=NULL)
 	    {
-	    strcpy(stage_name[stage_top], fname);
-	    stage_top++;
+	      strcpy(stage_name[stage_top], fname);
+	      stage_top++;
 	    }
 	  else ok=False;
 	}
@@ -70,7 +77,7 @@ void stage_names_load(FILE* conf)
 
 
 void scene_get_range(struct Graph* sptr, 
-		 float vmin[3], float vmax[3])
+		     float vmin[3], float vmax[3])
 {
   int i=0 /* , used=0 */;
   float_zeroes(3,vmin);
@@ -109,7 +116,7 @@ void token_try_collect()
      fabs(gate_position[0]-traveler.position[0])<token_eps &&
      fabs(gate_position[1]-traveler.position[1])<token_eps &&
      fabs(gate_position[2]-traveler.position[2])<token_eps 
-	 )
+     )
     {
       printf("TELEPORTING ...\n");
       config_next_scene();
@@ -118,43 +125,43 @@ void token_try_collect()
   
   for(i=0; i< TOKEN_MAX; i++)
 
-      if(
-	 !token_collected[i] &&
-	 fabs(token_position[i][0]-traveler.position[0])<token_eps &&
-	 fabs(token_position[i][1]-traveler.position[1])<token_eps &&
-	 fabs(token_position[i][2]-traveler.position[2])<token_eps 
-	 )
-	{int s;
-	  token_collected[i]=True;
-	  tokens_left--;
-	  if(sound) printf("\a");
-	  printf("REMAINING OBJECTS: %d. ",tokens_left); 
-	  printf("TIME: %d SECONDS\n", s=time(NULL)-token_timer);
-	  if(tokens_left==0 && !gate_visible)
+    if(
+       !token_collected[i] &&
+       fabs(token_position[i][0]-traveler.position[0])<token_eps &&
+       fabs(token_position[i][1]-traveler.position[1])<token_eps &&
+       fabs(token_position[i][2]-traveler.position[2])<token_eps 
+       )
+      {int s;
+	token_collected[i]=True;
+	tokens_left--;
+	if(sound) printf("\a");
+	printf("REMAINING OBJECTS: %d. ",tokens_left); 
+	printf("TIME: %d SECONDS\n", s=time(NULL)-token_timer);
+	if(tokens_left==0 && !gate_visible)
+	  {
+	    printf("1000000/(%d*%d)=%d: ", s+1,s+1,1000000/((s+1)*(s+1)));
+	    s=1000000/((s+1)*(s+1));
+	    printf("YOU HAVE %d+%d=%d POINTS.\n",
+		   score,s, score+s);
+	    score+=s; 
+	    /* // if(score-last_score>= 100) */
 	    {
-              printf("1000000/(%d*%d)=%d: ", s+1,s+1,1000000/((s+1)*(s+1)));
-	      s=1000000/((s+1)*(s+1));
-	      printf("YOU HAVE %d+%d=%d POINTS.\n",
-		     score,s, score+s);
-	      score+=s; 
-	      /* // if(score-last_score>= 100) */
+	      gate_visible=True;
+	      printf("STAGE FINISHED IN %d SECONDS.\n",
+		     s=time(NULL)-stage_timer);
+	      if(s<=150)
 		{
-		  gate_visible=True;
-		  printf("STAGE FINISHED IN %d SECONDS.\n",
-			 s=time(NULL)-stage_timer);
-		  if(s<=150)
-		    {
-		    printf("BONUS: 100*(150-%d) = %d.", s, 100*(150-s));
-		    s=100*(150-s);
-		    printf("YOU HAVE %d+%d=%d POINTS.\n",
-			   score,s, score+s);
-		    score+=s;
-		    }
-
-		  printf("FIND TELEPORT TO NEXT STAGE !\n");
+		  printf("BONUS: 100*(150-%d) = %d.", s, 100*(150-s));
+		  s=100*(150-s);
+		  printf("YOU HAVE %d+%d=%d POINTS.\n",
+			 score,s, score+s);
+		  score+=s;
 		}
-	    } 
-	}
+
+	      printf("FIND TELEPORT TO NEXT STAGE !\n");
+	    }
+	  } 
+      }
 }
 
 
@@ -166,19 +173,19 @@ void token_positions_init()
   scene_get_range(&scene, 
 		  vmin,  vmax);
 
-    srandom(time(NULL));
+  srandom(time(NULL));
 
-    for(i=0; i< TOKEN_MAX; i++)
-      {
-	token_position[i][0]=vmin[0]+random()%((int) floorf(vmax[0]-vmin[0]));
-	token_position[i][1]=vmin[1]+random()%((int) floorf(vmax[1]-vmin[1]));
-	token_position[i][2]=vmin[2]+random()%((int) floorf(vmax[2]-vmin[2]));
-	token_collected[i]=False;
-      }
-    tokens_left=TOKEN_MAX;
-    token_timer=time(NULL);
+  for(i=0; i< TOKEN_MAX; i++)
+    {
+      token_position[i][0]=vmin[0]+random()%((int) floorf(vmax[0]-vmin[0]));
+      token_position[i][1]=vmin[1]+random()%((int) floorf(vmax[1]-vmin[1]));
+      token_position[i][2]=vmin[2]+random()%((int) floorf(vmax[2]-vmin[2]));
+      token_collected[i]=False;
+    }
+  tokens_left=TOKEN_MAX;
+  token_timer=time(NULL);
 
-    printf("COLLECT %d OBJECTS. TIMER STARTED !\n",tokens_left );
+  printf("COLLECT %d OBJECTS. TIMER STARTED !\n",tokens_left );
 }
 
 
@@ -237,8 +244,8 @@ void traveler_move(float x, float y, float z, struct Traveler * traveler)
     printf("YOU ARE GETTING OUT OF RANGE !!!\n");
   else
     {
-    vector_add(m,traveler->position,traveler->position);
-    token_try_collect();
+      vector_add(m,traveler->position,traveler->position);
+      token_try_collect();
     }
 }
 
@@ -499,10 +506,10 @@ int scene_load(
   stream=fopen(fullName,"r");
 
   if(stream==NULL) 
-  {
-    printf("load: can not open '%s'\n", fname);
-    return -1; 
-  }
+    {
+      printf("load: can not open '%s'\n", fname);
+      return -1; 
+    }
   graph_fscanf(stream, gptr);
 
   traveler_init(travptr);
@@ -534,7 +541,7 @@ int scene_load(
   if(travptr->position[2] > travptr->vmax[2])
     travptr->position[2]= travptr->vmax[2]; 
 
-/*   printf("loaded from: '%s'\n", fname); */
+  /*   printf("loaded from: '%s'\n", fname); */
   return 0;
 }
 
@@ -547,7 +554,7 @@ int graph_load(
 	       )
 {
   FILE *stream;
-/*  char label[200]; */
+  /*  char label[200]; */
 
   char fullName[MAX_PATH_LENGTH];
   fullName[0]= (char) 0;
@@ -557,25 +564,25 @@ int graph_load(
   stream=fopen(fullName,"r");
 
   if(stream==NULL) 
-  {
-    printf("load: can not open '%s'\n", fname);
-    return -1; 
-  }
+    {
+      printf("load: can not open '%s'\n", fname);
+      return -1; 
+    }
   graph_fscanf(stream, gptr);
 
   fclose(stream);
-/*   printf("loaded from: '%s'\n", fname); */
+  /*   printf("loaded from: '%s'\n", fname); */
   return 0;
 }
 
 
 
 void graph_fscanf(
-		 FILE *stream,
-		 struct Graph * gptr
-		 )
+		  FILE *stream,
+		  struct Graph * gptr
+		  )
 {
-/*  char label[200]; */
+  /*  char label[200]; */
   graph_free(gptr);
 
   {
@@ -642,24 +649,24 @@ void graph_fscanf(
 
 
 void remaining_fscanf(
-		FILE* stream,
-		float light[3],
-		int* background,
-		struct Traveler *travptr
-		)
+		      FILE* stream,
+		      float light[3],
+		      int* background,
+		      struct Traveler *travptr
+		      )
 {
   char label[200];
-/*  float cursor[3]; */
+  /*  float cursor[3]; */
 
 
   /* // TRANSFORMATION */
   fscanf(stream, "%s", label);
   if(strcmp(label, transformation_label)==0)
-       do
-	 {   
-	   fscanf(stream, "%s", label);
-	 }
-       while(strcmp(label, light_label)!=0);
+    do
+      {   
+	fscanf(stream, "%s", label);
+      }
+    while(strcmp(label, light_label)!=0);
 
   /* // LIGHT */
   vector_fscanf(stream, light);
@@ -694,67 +701,67 @@ void remaining_fscanf(
 void initglx()
 {
 
-display=XOpenDisplay( NULL );
-if(display==NULL) 
+  display=XOpenDisplay( NULL );
+  if(display==NULL) 
+    {
+      printf("XOpenDisplay( NULL )== NULL\n");
+      exit(-1);
+    }
+
+
   {
-  printf("XOpenDisplay( NULL )== NULL\n");
-  exit(-1);
+    int glxminor, glxmajor;
+    printf("glXQueryExtension: %d\n", glXQueryExtension(display, NULL, NULL));
+    glXQueryVersion( display, &glxmajor, &glxminor);
+    printf("Version : %d.%d\n", glxmajor, glxminor);
   }
 
-
- {
-   int glxminor, glxmajor;
-   printf("glXQueryExtension: %d\n", glXQueryExtension(display, NULL, NULL));
-   glXQueryVersion( display, &glxmajor, &glxminor);
-   printf("Version : %d.%d\n", glxmajor, glxminor);
- }
-
-{
-XVisualInfo vinfo_template;
-vinfo_template.screen=DefaultScreen(display);
-xvisualinfo_array = XGetVisualInfo(display, 
-                                   VisualScreenMask,
-                                   &vinfo_template, &xvisualinfo_nitems);
-if(xvisualinfo_array==NULL)
   {
-  printf("No visual infos for default screen \n");
-  exit(-1);
+    XVisualInfo vinfo_template;
+    vinfo_template.screen=DefaultScreen(display);
+    xvisualinfo_array = XGetVisualInfo(display, 
+				       VisualScreenMask,
+				       &vinfo_template, &xvisualinfo_nitems);
+    if(xvisualinfo_array==NULL)
+      {
+	printf("No visual infos for default screen \n");
+	exit(-1);
+      }
   }
-}
 
- {
-   int revert_to;
-   XGetInputFocus(display, &terminal,&revert_to);
- }
+  {
+    int revert_to;
+    XGetInputFocus(display, &terminal,&revert_to);
+  }
 
- window= XCreateSimpleWindow( display, DefaultRootWindow(display) , 0,0, 
-			      screen_width, screen_height,
-                              0, 0, 0 );
+  window= XCreateSimpleWindow( display, DefaultRootWindow(display) , 0,0, 
+			       screen_width, screen_height,
+			       0, 0, 0 );
 
 
- {
-   /* /// Enable events for the window */
+  {
+    /* /// Enable events for the window */
 
-   unsigned long valuemask=CWEventMask;
-   windowattributes.event_mask=
-     KeyPressMask   
-     | ExposureMask        
-     ;
-   XChangeWindowAttributes(display, window, valuemask, &windowattributes);    
- }
- XStoreName(display, window, program_name);
- XMapWindow(display, window);
- XFlush(display);
+    unsigned long valuemask=CWEventMask;
+    windowattributes.event_mask=
+      KeyPressMask   
+      | ExposureMask        
+      ;
+    XChangeWindowAttributes(display, window, valuemask, &windowattributes);    
+  }
+  XStoreName(display, window, program_name);
+  XMapWindow(display, window);
+  XFlush(display);
 
- /* // printf("terminal: %d\n", terminal);  */
- /* // printf("window: %d\n", window);  */
+  /* // printf("terminal: %d\n", terminal);  */
+  /* // printf("window: %d\n", window);  */
 
  
- glxcontext= glXCreateContext(display, &xvisualinfo_array[0], NULL, True);
+  glxcontext= glXCreateContext(display, &xvisualinfo_array[0], NULL, True);
 
- printf("glXIsDirect: %d\n", glXIsDirect(display, glxcontext) );
+  printf("glXIsDirect: %d\n", glXIsDirect(display, glxcontext) );
 
- glXMakeCurrent(display, window, glxcontext);
+  glXMakeCurrent(display, window, glxcontext);
  
 }
 
@@ -842,7 +849,7 @@ void callbackKeyPress( XKeyEvent* evptr)
       stage_timer=time(NULL)-stage_timer-1;
       token_timer=time(NULL)-token_timer-1;
       printf("RESUMED. Stage Timer: %d. Collection_Timer: %d.\n",
-	    (int) (time(NULL)-stage_timer), (int) (time(NULL)-token_timer) );
+	     (int) (time(NULL)-stage_timer), (int) (time(NULL)-token_timer) );
 
     }
 
@@ -940,16 +947,16 @@ void callbackKeyPress( XKeyEvent* evptr)
 
      
 
-/*     case XK_b: */
-/*       background= (background+1)% COLOR_MAX; redraw(); break; */
+      /*     case XK_b: */
+      /*       background= (background+1)% COLOR_MAX; redraw(); break; */
 
-/*     case XK_l: */
-/*       switch((evptr->state)&(ControlMask|Mod1Mask|ShiftMask)) */
-/* 	{ */
-/* 	case 0: */
-/* 	  set_light(light); redraw(); break; */
-/* 	}; */
-/*       break; */
+      /*     case XK_l: */
+      /*       switch((evptr->state)&(ControlMask|Mod1Mask|ShiftMask)) */
+      /* 	{ */
+      /* 	case 0: */
+      /* 	  set_light(light); redraw(); break; */
+      /* 	}; */
+      /*       break; */
           
 
     case XK_h:
@@ -1105,16 +1112,16 @@ void redraw()
   }
 
   if(gate_visible) 
-	{
-	  glPushMatrix();
-	  glTranslatef(
-		       gate_position[0],
-		       gate_position[1],
-		       gate_position[2] 
-		       );
-	  glCallList( gate_list );
-	  glPopMatrix();
-	}
+    {
+      glPushMatrix();
+      glTranslatef(
+		   gate_position[0],
+		   gate_position[1],
+		   gate_position[2] 
+		   );
+      glCallList( gate_list );
+      glPopMatrix();
+    }
 
 
   /* //   glFlush(); */
@@ -1136,8 +1143,8 @@ void help_keys()
   printf("<R> - random stage selection on/off switch\n");
   printf("<P> - pause\n");
   printf("<S> - sound OFF/ON\n");
-/*   printf("<L> - set the light perpendicular to the screen\n"); */
-/*   printf("<B> - change background color\n"); */
+  /*   printf("<L> - set the light perpendicular to the screen\n"); */
+  /*   printf("<B> - change background color\n"); */
   printf("<Q> - quit\n");
 
   /* // ... */
@@ -1163,7 +1170,7 @@ int main(int argc, char *argv[])
     configFileName = argv[1];
   }
 
-    printf("\n TEST: %s %s\n", dataDir , configFileName );
+  printf("\n TEST: %s %s\n", dataDir , configFileName );
 
 
   printf("==================================================\n");
