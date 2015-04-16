@@ -43,7 +43,19 @@
 #include <GL/glx.h>
 
 
-/* ///// PROGRAM VARIABLES AND FUNCTIONS //////////////////////// */
+/* ///// PROGRAM CONSTANTS, VARIABLES AND FUNCTIONS //////////////////////// */
+
+
+/* MAXIMAL PATH LENGTH */
+
+#define MAX_PATH_LENGTH  4096
+
+
+/* BASE DATA DIRECTORY */
+
+char * dataDir = "";
+
+
 
 /* ///////// X / GLX VARIABLES */
 

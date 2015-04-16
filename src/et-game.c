@@ -491,8 +491,13 @@ int scene_load(
 {
   FILE *stream;
   /* char label[200]; */
+  char fullName[MAX_PATH_LENGTH];
+  fullName[0]= (char) 0;
+  strcat(fullName, dataDir);
+  strcat(fullName, fname);
+  printf("TEST scene_load: %s\n", fullName);
+  stream=fopen(fullName,"r");
 
-  stream=fopen(fname,"r");
   if(stream==NULL) 
   {
     printf("load: can not open '%s'\n", fname);
@@ -544,7 +549,13 @@ int graph_load(
   FILE *stream;
 /*  char label[200]; */
 
-  stream=fopen(fname,"r");
+  char fullName[MAX_PATH_LENGTH];
+  fullName[0]= (char) 0;
+  strcat(fullName, dataDir);
+  strcat(fullName, fname);
+  printf("TEST graph_load: %s\n", fullName);
+  stream=fopen(fullName,"r");
+
   if(stream==NULL) 
   {
     printf("load: can not open '%s'\n", fname);
@@ -1139,13 +1150,20 @@ void help_keys()
 
 int main(int argc, char *argv[])
 {
+  char * configFileName;
 
-
-  if(argc < 2)
-    {
+  if(argc < 2){
+    /*
       printf("usage:   et-game  config_file_name\n");
       exit(-1);
-    }
+    */
+    dataDir = DATADIR "/" PACKAGE "/" ;
+    configFileName = DATADIR "/" PACKAGE "/game.cfg";
+  } else {
+    configFileName = argv[1];
+  }
+
+    printf("\n TEST: %s %s\n", dataDir , configFileName );
 
 
   printf("==================================================\n");
@@ -1181,7 +1199,7 @@ int main(int argc, char *argv[])
   gate_list=glGenLists(1);
 
 
-  config_stream=fopen(argv[1],"r");
+  config_stream=fopen(configFileName,"r");
 
   if(config_stream == NULL)
     {
