@@ -459,10 +459,24 @@ void config_next_scene()
   struct Graph scene1;
   graph_init(&scene1);
 
-  if(stage_random) stage_current=random()%stage_top;
-  else stage_current++;
+  /*
+    if(stage_random) stage_current=random()%stage_top;
+    else stage_current++;
+  */
 
+  stage_current++;
 
+  if(0<stage_current && stage_current<stage_top-2)
+    { /* swap with random stage in the range [stage_current, stage_top-2] */
+      int r;
+      r= random() % (stage_top-2-stage_current) ;
+      if(r>0){
+	char* tmp;
+	tmp=stage_name[stage_current];
+	stage_name[stage_current]=stage_name[stage_current+r];
+	stage_name[stage_current+r]=tmp;
+      }
+    }
 
 
   if(stage_current<stage_top &&
@@ -974,20 +988,21 @@ void callbackKeyPress( XKeyEvent* evptr)
 	  printf("SOUND ON\n");
 	}      
       break;
-
-    case XK_r:
-      if(stage_random) 
+      
+      /*
+	case XK_r:
+	if(stage_random) 
 	{
-	  stage_random=False;
-          /* // stage_current=-1; */
-	  printf("RANDOM STAGE SELECTION: OFF\n");
+	stage_random=False;
+	printf("RANDOM STAGE SELECTION: OFF\n");
 	}
-      else
+	else
 	{
-	  stage_random=True;
-	  printf("RANDOM STAGE SELECTION: ON\n");
+	stage_random=True;
+	printf("RANDOM STAGE SELECTION: ON\n");
 	}
-      break;
+	break;
+      */
 
     case XK_q:
       exit(0); break;
