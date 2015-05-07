@@ -42,6 +42,8 @@
 #include <GL/gl.h>
 #include <GL/glx.h>
 
+#include "gl-drawings.h"
+
 
 /* ///// PROGRAM CONSTANTS, VARIABLES AND FUNCTIONS //////////////////////// */
 
@@ -78,6 +80,12 @@ float screen_distance= 20.0;
 float clip_min_limit=0.0001;
 float clip_min= 0.2;
 float clip_max= 100.0;
+
+const float boundMargin = 20.0;
+const float boundMargin2 = 22.0; /* sould be greater than boundMargin */
+
+const int boundAlertInit = 3;
+int boundAlert = 0; /* variable that is set to positive value to draw a bounding box */
 
 float mov_step=0.5;
 float h_rot_step=5, v_rot_step=5;

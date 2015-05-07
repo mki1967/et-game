@@ -234,16 +234,20 @@ void traveler_move(float x, float y, float z, struct Traveler * traveler)
   glPopMatrix();
 
   if(
-     m[0]+traveler->position[0]<traveler->vmin[0]-20 ||
-     m[0]+traveler->position[0]>traveler->vmax[0]+20 ||
-     m[1]+traveler->position[1]<traveler->vmin[1]-20 ||
-     m[1]+traveler->position[1]>traveler->vmax[1]+20 ||
-     m[2]+traveler->position[2]<traveler->vmin[2]-20 ||
-     m[2]+traveler->position[2]>traveler->vmax[2]+20 
+     m[0]+traveler->position[0]<traveler->vmin[0]-boundMargin ||
+     m[0]+traveler->position[0]>traveler->vmax[0]+boundMargin ||
+     m[1]+traveler->position[1]<traveler->vmin[1]-boundMargin ||
+     m[1]+traveler->position[1]>traveler->vmax[1]+boundMargin ||
+     m[2]+traveler->position[2]<traveler->vmin[2]-boundMargin ||
+     m[2]+traveler->position[2]>traveler->vmax[2]+boundMargin 
      )
+    {
     printf("YOU ARE GETTING OUT OF RANGE !!!\n");
+    boundAlert=boundAlertInit;
+    }
   else
     {
+      if(boundAlert>0) boundAlert--;
       vector_add(m,traveler->position,traveler->position);
       token_try_collect();
     }
@@ -1091,6 +1095,7 @@ void redraw()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+
   {
     float diffuse[4];
 
@@ -1104,6 +1109,20 @@ void redraw()
     glLightfv( GL_LIGHT1, GL_POSITION, light);
     glLightfv(GL_LIGHT1,GL_DIFFUSE, diffuse);
     vector_scale(-1,light);
+  }
+
+  if(boundAlert){
+  drawFrameBox(
+	       traveler.vmin[0]-boundMargin2, traveler.vmin[1]-boundMargin2, traveler.vmin[2]-boundMargin2,
+	       traveler.vmax[0]+boundMargin2, traveler.vmax[1]+boundMargin2, traveler.vmax[2]+boundMargin2,
+	       1,0,0 /* RED */
+	       );
+
+  drawBox(
+	       traveler.vmin[0]-boundMargin2, traveler.vmin[1]-boundMargin2, traveler.vmin[2]-boundMargin2,
+	       traveler.vmax[0]+boundMargin2, traveler.vmax[1]+boundMargin2, traveler.vmax[2]+boundMargin2,
+	       0.6,0,0 /* RED */
+	       );
   }
 
 
@@ -1139,7 +1158,8 @@ void redraw()
     }
 
 
-  /* //   glFlush(); */
+
+  glFlush(); 
   glXSwapBuffers(display,window);
 }
 
