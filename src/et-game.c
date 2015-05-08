@@ -233,6 +233,46 @@ void traveler_move(float x, float y, float z, struct Traveler * traveler)
   glGetFloatv( GL_MODELVIEW_MATRIX, m );
   glPopMatrix();
 
+  if(boundAlert>0) boundAlert--;
+  vector_add(m,traveler->position,traveler->position);
+
+
+  /* CHECKING FOR BOUNDING LIMITS */
+
+  if(traveler->position[0] < traveler->vmin[0]-boundMargin) {
+    traveler->position[0] = traveler->vmin[0]-boundMargin;
+    boundAlert=boundAlertInit;
+  }
+  if(traveler->position[0] > traveler->vmax[0]+boundMargin) {
+    traveler->position[0] = traveler->vmax[0]+boundMargin;
+    boundAlert=boundAlertInit;
+  }
+
+  if(traveler->position[1] < traveler->vmin[1]-boundMargin) {
+    traveler->position[1] = traveler->vmin[1]-boundMargin;
+    boundAlert=boundAlertInit;
+  }
+  if(traveler->position[1] > traveler->vmax[1]+boundMargin) {
+    traveler->position[1] = traveler->vmax[1]+boundMargin;
+    boundAlert=boundAlertInit;
+  }
+
+  if(traveler->position[2] < traveler->vmin[2]-boundMargin) {
+    traveler->position[2] = traveler->vmin[2]-boundMargin;
+    boundAlert=boundAlertInit;
+  }
+  if(traveler->position[2] > traveler->vmax[2]+boundMargin) {
+    traveler->position[2] = traveler->vmax[2]+boundMargin;
+    boundAlert=boundAlertInit;
+  }
+
+
+  /* COLLECT TOKEN,  IF POSSIBLE */
+  token_try_collect();
+
+
+  /* OLD VERSION */
+  /*
   if(
      m[0]+traveler->position[0]<traveler->vmin[0]-boundMargin ||
      m[0]+traveler->position[0]>traveler->vmax[0]+boundMargin ||
@@ -251,6 +291,7 @@ void traveler_move(float x, float y, float z, struct Traveler * traveler)
       vector_add(m,traveler->position,traveler->position);
       token_try_collect();
     }
+  */
 }
 
 
