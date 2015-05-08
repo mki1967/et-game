@@ -55,7 +55,7 @@ void stage_names_load(FILE* conf)
       fullName[0]= (char) 0;
       strcat(fullName, dataDir);
       strcat(fullName, fname);
-      printf("TEST stage_names_load: %s\n", fullName);
+      if( verboseMode ) printf("TEST stage_names_load: %s\n", fullName);
 
       ok= file_exists(fullName);
       if( ok)
@@ -118,7 +118,7 @@ void token_try_collect()
      fabs(gate_position[2]-traveler.position[2])<token_eps 
      )
     {
-      printf("TELEPORTING ...\n");
+      if( verboseMode ) printf("TELEPORTING ...\n");
       config_next_scene();
       return;
     }
@@ -134,31 +134,31 @@ void token_try_collect()
       {int s;
 	token_collected[i]=True;
 	tokens_left--;
-	if(sound) printf("\a");
-	printf("REMAINING OBJECTS: %d. ",tokens_left); 
-	printf("TIME: %d SECONDS\n", s=time(NULL)-token_timer);
+	if(sound) if( verboseMode ) printf("\a");
+	if( verboseMode ) printf("REMAINING OBJECTS: %d. ",tokens_left); 
+	if( verboseMode ) printf("TIME: %d SECONDS\n", s=time(NULL)-token_timer);
 	if(tokens_left==0 && !gate_visible)
 	  {
-	    printf("1000000/(%d*%d)=%d: ", s+1,s+1,1000000/((s+1)*(s+1)));
+	    if( verboseMode ) printf("1000000/(%d*%d)=%d: ", s+1,s+1,1000000/((s+1)*(s+1)));
 	    s=1000000/((s+1)*(s+1));
-	    printf("YOU HAVE %d+%d=%d POINTS.\n",
+	    if( verboseMode ) printf("YOU HAVE %d+%d=%d POINTS.\n",
 		   score,s, score+s);
 	    score+=s; 
 	    /* // if(score-last_score>= 100) */
 	    {
 	      gate_visible=True;
-	      printf("STAGE FINISHED IN %d SECONDS.\n",
+	      if( verboseMode ) printf("STAGE FINISHED IN %d SECONDS.\n",
 		     s=time(NULL)-stage_timer);
 	      if(s<=150)
 		{
-		  printf("BONUS: 100*(150-%d) = %d.", s, 100*(150-s));
+		  if( verboseMode ) printf("BONUS: 100*(150-%d) = %d.", s, 100*(150-s));
 		  s=100*(150-s);
-		  printf("YOU HAVE %d+%d=%d POINTS.\n",
+		  if( verboseMode ) printf("YOU HAVE %d+%d=%d POINTS.\n",
 			 score,s, score+s);
 		  score+=s;
 		}
 
-	      printf("FIND TELEPORT TO NEXT STAGE !\n");
+	      if( verboseMode ) printf("FIND TELEPORT TO NEXT STAGE !\n");
 	    }
 	  } 
       }
@@ -185,7 +185,7 @@ void token_positions_init()
   tokens_left=TOKEN_MAX;
   token_timer=time(NULL);
 
-  printf("COLLECT %d OBJECTS. TIMER STARTED !\n",tokens_left );
+  if( verboseMode ) printf("COLLECT %d OBJECTS. TIMER STARTED !\n",tokens_left );
 }
 
 
@@ -266,7 +266,8 @@ void traveler_move(float x, float y, float z, struct Traveler * traveler)
     boundAlert=boundAlertInit;
   }
 
-
+  if(boundAlert == boundAlertInit) 
+    if( verboseMode ) printf("YOU ARE ON THE SURFACE OF BOUNDING BOX !!!\n");
   /* COLLECT TOKEN,  IF POSSIBLE */
   token_try_collect();
 
@@ -282,7 +283,7 @@ void traveler_move(float x, float y, float z, struct Traveler * traveler)
      m[2]+traveler->position[2]>traveler->vmax[2]+boundMargin 
      )
     {
-    printf("YOU ARE GETTING OUT OF RANGE !!!\n");
+    if( verboseMode ) printf("YOU ARE GETTING OUT OF RANGE !!!\n");
     boundAlert=boundAlertInit;
     }
   else
@@ -328,7 +329,7 @@ void screen_set_distance(struct Screen* scr,float distance)
 {
   scr->distance=distance;
   setfrustum();
-  printf("Screen distance is: %f\n", scr->distance);
+  if( verboseMode ) printf("Screen distance is: %f\n", scr->distance);
 }
 
 void screen_set_clipping(struct Screen* scr,float clip_min, float clip_max)
@@ -340,7 +341,7 @@ void screen_set_clipping(struct Screen* scr,float clip_min, float clip_max)
       setfrustum();
     }
   else printf("Screen clipping: bad values !\n");
-  printf("Screen: clip_min = %f, clip_max = %f\n", scr->clip_min, scr->clip_max);
+  if( verboseMode ) printf("Screen: clip_min = %f, clip_max = %f\n", scr->clip_min, scr->clip_max);
 
 }
 
@@ -448,7 +449,7 @@ void set_light(float light[16])
   glMultMatrixf(basic_light);
   glGetFloatv( GL_MODELVIEW_MATRIX, light);
   glPopMatrix();
-  printf("light=( %f, %f, %f, %f )\n", light[0], light[1], light[2], light[3]);
+  if( verboseMode ) printf("light=( %f, %f, %f, %f )\n", light[0], light[1], light[2], light[3]);
 }
 
 
@@ -529,20 +530,20 @@ void config_next_scene()
 		&scene1, light, &background ,&traveler)==0
      )
     {
-      printf("STAGE: %s\n", stage_name[stage_current]);
+      if( verboseMode ) printf("STAGE: %s\n", stage_name[stage_current]);
       graph_free(&scene);
       scene=scene1;
       graph_to_display_list(scene_list, &scene);
       last_score=score;
       stage_timer=time(NULL);
-      printf("STAGE TIMER STARTED.\n");
+      if( verboseMode ) printf("STAGE TIMER STARTED.\n");
       gate_init();
       token_positions_init();
     }  
   else
     {
-      printf("\nTHERE IS NO NEXT STAGE ...\n");
-      printf("YOUR SCORE: %d\n", score);
+      if( verboseMode ) printf("\nTHERE IS NO NEXT STAGE ...\n");
+      if( verboseMode ) printf("YOUR SCORE: %d\n", score);
       exit(0);
     }
 }
@@ -561,7 +562,7 @@ int scene_load(
   fullName[0]= (char) 0;
   strcat(fullName, dataDir);
   strcat(fullName, fname);
-  printf("TEST scene_load: %s\n", fullName);
+  if( verboseMode ) printf("TEST scene_load: %s\n", fullName);
   stream=fopen(fullName,"r");
 
   if(stream==NULL) 
@@ -600,7 +601,7 @@ int scene_load(
   if(travptr->position[2] > travptr->vmax[2])
     travptr->position[2]= travptr->vmax[2]; 
 
-  /*   printf("loaded from: '%s'\n", fname); */
+  /*   if( verboseMode ) printf("loaded from: '%s'\n", fname); */
   return 0;
 }
 
@@ -619,7 +620,7 @@ int graph_load(
   fullName[0]= (char) 0;
   strcat(fullName, dataDir);
   strcat(fullName, fname);
-  printf("TEST graph_load: %s\n", fullName);
+  if( verboseMode ) printf("TEST graph_load: %s\n", fullName);
   stream=fopen(fullName,"r");
 
   if(stream==NULL) 
@@ -630,7 +631,7 @@ int graph_load(
   graph_fscanf(stream, gptr);
 
   fclose(stream);
-  /*   printf("loaded from: '%s'\n", fname); */
+  /*   if( verboseMode ) printf("loaded from: '%s'\n", fname); */
   return 0;
 }
 
@@ -770,9 +771,9 @@ void initglx()
 
   {
     int glxminor, glxmajor;
-    printf("glXQueryExtension: %d\n", glXQueryExtension(display, NULL, NULL));
+    if( verboseMode ) printf("glXQueryExtension: %d\n", glXQueryExtension(display, NULL, NULL));
     glXQueryVersion( display, &glxmajor, &glxminor);
-    printf("Version : %d.%d\n", glxmajor, glxminor);
+    if( verboseMode ) printf("Version : %d.%d\n", glxmajor, glxminor);
   }
 
   {
@@ -812,13 +813,13 @@ void initglx()
   XMapWindow(display, window);
   XFlush(display);
 
-  /* // printf("terminal: %d\n", terminal);  */
-  /* // printf("window: %d\n", window);  */
+  /* // if( verboseMode ) printf("terminal: %d\n", terminal);  */
+  /* // if( verboseMode ) printf("window: %d\n", window);  */
 
  
   glxcontext= glXCreateContext(display, &xvisualinfo_array[0], NULL, True);
 
-  printf("glXIsDirect: %d\n", glXIsDirect(display, glxcontext) );
+  if( verboseMode ) printf("glXIsDirect: %d\n", glXIsDirect(display, glxcontext) );
 
   glXMakeCurrent(display, window, glxcontext);
  
@@ -876,7 +877,7 @@ void callbackExpose( XExposeEvent* evptr)
       {
 	screen.width= param[2];
 	screen.height= param[3];
-	printf("viewport: %d x %d\n", screen.width, screen.height);
+	if( verboseMode ) printf("viewport: %d x %d\n", screen.width, screen.height);
       }
   }
   setfrustum();
@@ -907,7 +908,7 @@ void callbackKeyPress( XKeyEvent* evptr)
       paused=False;
       stage_timer=time(NULL)-stage_timer-1;
       token_timer=time(NULL)-token_timer-1;
-      printf("RESUMED. Stage Timer: %d. Collection_Timer: %d.\n",
+      if( verboseMode ) printf("RESUMED. Stage Timer: %d. Collection_Timer: %d.\n",
 	     (int) (time(NULL)-stage_timer), (int) (time(NULL)-token_timer) );
 
     }
@@ -983,7 +984,7 @@ void callbackKeyPress( XKeyEvent* evptr)
 	  paused=True;
           stage_timer=time(NULL)-stage_timer;
           token_timer=time(NULL)-token_timer;
-	  printf("PAUSED. Stage Timer: %d. Collection Timer: %d.\n",
+	  if( verboseMode ) printf("PAUSED. Stage Timer: %d. Collection Timer: %d.\n",
 		 (int) stage_timer, (int) token_timer);
 
 	  redraw(); 
@@ -991,6 +992,24 @@ void callbackKeyPress( XKeyEvent* evptr)
 	}
       break;
 
+    case XK_v : 
+      switch((evptr->state)&(ControlMask|Mod1Mask|ShiftMask))
+	{
+	case ControlMask:
+          if(verboseMode){
+	    verboseMode=0;
+	  }
+	  else{
+	    verboseMode=1;
+	    printf( welcomeMessage );
+            printf( "\n"
+		    "You have switched on the verbose mode by pressing <Ctrl>+'v'\n"
+		    "(press  <Ctrl>+'v' againg to switch off the verbose mode.)\n"
+		    );
+	  }
+	  break;
+	}
+      break;
 
     case XK_Delete:
     case XK_BackSpace:
@@ -1025,12 +1044,12 @@ void callbackKeyPress( XKeyEvent* evptr)
       if(sound)
 	{
 	  sound=0;
-	  printf("SOUND OFF\n");
+	  if( verboseMode ) printf("SOUND OFF\n");
 	}
       else
 	{
 	  sound=1;
-	  printf("SOUND ON\n");
+	  if( verboseMode ) printf("SOUND ON\n");
 	}      
       break;
       
@@ -1039,12 +1058,12 @@ void callbackKeyPress( XKeyEvent* evptr)
 	if(stage_random) 
 	{
 	stage_random=False;
-	printf("RANDOM STAGE SELECTION: OFF\n");
+	if( verboseMode ) printf("RANDOM STAGE SELECTION: OFF\n");
 	}
 	else
 	{
 	stage_random=True;
-	printf("RANDOM STAGE SELECTION: ON\n");
+	if( verboseMode ) printf("RANDOM STAGE SELECTION: ON\n");
 	}
 	break;
       */
@@ -1216,9 +1235,10 @@ void help_keys()
   printf("<Shift>+(<Arrow keys>, <Home>, <End>) - move the observer\n");
   printf("<Space> - reset observer upright\n");
   printf("<H> - list of key commands\n");
-  printf("<R> - random stage selection on/off switch\n");
+  /* printf("<R> - random stage selection on/off switch\n"); */
   printf("<P> - pause\n");
-  printf("<S> - sound OFF/ON\n");
+  printf("<Ctrl>+V - swtch verbose mode on/off\n");
+  /* printf("<S> - sound OFF/ON\n"); */
   /*   printf("<L> - set the light perpendicular to the screen\n"); */
   /*   printf("<B> - change background color\n"); */
   printf("<Q> - quit\n");
@@ -1246,27 +1266,30 @@ int main(int argc, char *argv[])
     configFileName = argv[1];
   }
 
-  printf("\n TEST: %s %s\n", dataDir , configFileName );
+  if( verboseMode ) printf( welcomeMessage );
+
+  if( verboseMode ) printf("\n TEST: %s %s\n", dataDir , configFileName );
+
+  /*
+  if( verboseMode ) printf("==================================================\n");
+  if( verboseMode ) printf("E.T. GAME: SEARCH GAME\n");
+  if( verboseMode ) printf("version: " PACKAGE_VERSION "\n\n");
+  if( verboseMode ) printf("Copyright (C) 2003, 2013  Marcin Kik   mki1967@gmail.com \n");
+  if( verboseMode ) printf("\nE.T. GAME comes with ABSOLUTELY NO WARRANTY.\n");
+
+  if( verboseMode ) printf("This is free software, and you are welcome to redistribute it\n");
+  if( verboseMode ) printf(" under conditions of GNU GENERAL PUBLIC LICENSE\n");
+
+  if( verboseMode ) printf("Send any comments or suggestions to: " PACKAGE_BUGREPORT "\n");
+  if( verboseMode ) printf("Most recent versions are available at: " PACKAGE_URL "\n");
+
+  if( verboseMode ) printf("\n");
+  if( verboseMode ) printf("(Press key <H> on graphical window to print the list of key commands)\n");
 
 
-  printf("==================================================\n");
-  printf("E.T. GAME: SEARCH GAME\n");
-  printf("version: " PACKAGE_VERSION "\n\n");
-  printf("Copyright (C) 2003, 2013  Marcin Kik   mki1967@gmail.com \n");
-  printf("\nE.T. GAME comes with ABSOLUTELY NO WARRANTY.\n");
+  if( verboseMode ) printf("==================================================\n");
+  */  
 
-  printf("This is free software, and you are welcome to redistribute it\n");
-  printf(" under conditions of GNU GENERAL PUBLIC LICENSE\n");
-
-  printf("Send any comments or suggestions to: " PACKAGE_BUGREPORT "\n");
-  printf("Most recent versions are available at: " PACKAGE_URL "\n");
-
-  printf("\n");
-  printf("(Press key <H> on graphical window to print the list of key commands)\n");
-
-
-  printf("==================================================\n");
-  
   initglx();
   screen_init(&screen);
   setfrustum();
@@ -1308,8 +1331,8 @@ int main(int argc, char *argv[])
   stage_names_load(config_stream);
   fclose(config_stream);
 
-  printf("NUMBER OF STAGES: %d.\n", stage_top);
-  printf("FOR RANDOM STAGE SELECTION PRESS <R> KEY\n");
+  if( verboseMode ) printf("NUMBER OF STAGES: %d.\n", stage_top);
+  /* if( verboseMode ) printf("FOR RANDOM STAGE SELECTION PRESS <R> KEY\n"); */
 
   config_next_scene();
 

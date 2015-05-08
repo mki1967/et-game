@@ -48,6 +48,32 @@
 /* ///// PROGRAM CONSTANTS, VARIABLES AND FUNCTIONS //////////////////////// */
 
 
+/* WELCOME MESSAGE */
+
+char * welcomeMessage =
+
+  "==================================================\n"
+  "E.T. GAME: SEARCH GAME\n"
+  "version: " PACKAGE_VERSION "\n\n"
+  "Copyright (C) 2003, 2013  Marcin Kik   mki1967@gmail.com \n"
+  "\nE.T. GAME comes with ABSOLUTELY NO WARRANTY.\n"
+
+  "This is free software, and you are welcome to redistribute it\n"
+  " under conditions of GNU GENERAL PUBLIC LICENSE\n"
+
+  "Send any comments or suggestions to: " PACKAGE_BUGREPORT "\n"
+  "Most recent versions are available at: " PACKAGE_URL "\n"
+
+  "\n"
+  "(Press key <H> on graphical window to print the list of key commands)\n"
+  "==================================================\n"
+  ;
+
+
+/* OPTIONS */
+
+int verboseMode = 0;
+
 /* MAXIMAL PATH LENGTH */
 
 #define MAX_PATH_LENGTH  4096
