@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <math.h>
 #include <time.h>
@@ -112,6 +113,9 @@ const float boundMargin2 = 22.0; /* sould be greater than boundMargin */
 
 const int boundAlertInit = 3;
 int boundAlert = 0; /* variable that is set to positive value to draw a bounding box */
+
+const int collectAlertInit = 1;
+int collectAlert = 0; /* variable that is set to positive value to draw a bounding box */
 
 float mov_step=0.5;
 float h_rot_step=5, v_rot_step=5;

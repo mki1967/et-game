@@ -134,7 +134,8 @@ void token_try_collect()
       {int s;
 	token_collected[i]=True;
 	tokens_left--;
-	if(sound) if( verboseMode ) printf("\a");
+	collectAlert=collectAlertInit;
+	/* if(sound) if( verboseMode ) printf("\a"); */
 	if( verboseMode ) printf("REMAINING OBJECTS: %d. ",tokens_left); 
 	if( verboseMode ) printf("TIME: %d SECONDS\n", s=time(NULL)-token_timer);
 	if(tokens_left==0 && !gate_visible)
@@ -1140,9 +1141,19 @@ void graph_to_display_list(GLuint list, struct Graph *gptr)
 
 void redraw()
 {
+  glEnable(GL_DEPTH_TEST);
+
+  if( collectAlert ) {
+    collectAlert--;
+    glClearColor(1.0, 0.0, 0.0, 0.0); /* RED */
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glFlush(); 
+    glXSwapBuffers(display,window);
+    /* sleep(1); */ /* one second sleep */
+    return;
+  }
 
   glClearColor(color[background][0], color[background][1], color[background][2], 0.0);
-  glEnable(GL_DEPTH_TEST);
 
 
   glMatrixMode(GL_MODELVIEW);
