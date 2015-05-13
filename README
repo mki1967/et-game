@@ -59,7 +59,25 @@ You can extend the game by designing your own stages and adding
 their names to the configuration file. 
 (At this moment you can find E.T. EDITOR at https://github.com/mki1967/et-edit )
 
+REQUIRED PACKAGES:
+------------------
+For compilation on Linux Ubuntu:
+ * mesa-common-dev
+ * libgl1-mesa-dev
+ * libX11-dev
 
 
+BUILDING IN THE REPO CLONED FROM GITHUB:
+----------------------------------------
+
+To build the project automatically, you need autotools and automake packages.
+First time after you clone the repository, 
+you need to run the script: 
+   ./autogen.sh
+
+Then you may run 
+* ./configure # or ./configure --prefix /home/yourusername
+* make
+* sudo make install #  or make install if you want to install this in /home/yourusername/ . 
 
 
